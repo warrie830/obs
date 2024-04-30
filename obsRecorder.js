@@ -32,6 +32,91 @@ function initialize(win) {
   configureOBS();
   scene = setupScene();
   setupSources(scene);
+  // const source= osn.InputFactory.create('image_source', 'logo', {file: fixPathWhenPackaged(path.join(__dirname, 'moon.jpg'))});
+  
+  // const source1= osn.InputFactory.create('audio_line', 'vid', {file: fixPathWhenPackaged(path.join(__dirname, 'vid.mp4'))});
+    //   video
+  //   const test_video = osn.InputFactory.create(
+  //     'ffmpeg_source',
+  //     "video_test",
+  //     {
+  //       is_local_file: true,
+  //       local_file: path.join(__dirname, "vid.mp4"),
+  //       looping: true,
+  //     }
+  //   );
+  //   test_video.settings["buffering_mb"] = 3;
+  //   test_video.settings["clear_on_media_end"] = false;
+  //   test_video.settings["looping"] = true;
+  //   test_video.settings["speed_percent"] = 80;
+  //   test_video.settings["caching"] = true;//
+  // const sceneItem = scene.add(source);
+  // scene.add(test_video)
+  // console.log('---------',osn.NodeObs)
+  
+//   osn.NodeObs.inputTypes.forEach(function(inputType) {
+//     if( osn.NodeObs.skipSource(inputType)) { return;}
+//     console.log('Creating input source of type: ' + inputType);
+//     // Creating input source
+//     const input = osn.InputFactory.create(inputType, 'input');
+
+//     // Checking if input source was created correctly
+//     // expect(input).to.not.equal(undefined, GetErrorMessage(ETestErrorMsg.CreateInput, inputType));
+
+//     // Getting input id
+//     let id = undefined;
+//     id = input.id;
+
+//     // Checking if id was returned correctly
+//     // expect(id).to.not.equal(undefined, GetErrorMessage(ETestErrorMsg.SourceId,inputType));
+//     // expect(id).to.equal(inputType, GetErrorMessage(ETestErrorMsg.InputId, inputType));
+
+//     // Getting input name
+//     let inputName = undefined;
+//     inputName = input.name;
+
+//     // Checking if name was returned correctly
+//     // expect(inputName).to.not.equal(undefined, GetErrorMessage(ETestErrorMsg.SourceName, inputType));
+//     // expect(inputName).to.equal('input', GetErrorMessage(ETestErrorMsg.InputName, inputType));
+
+//     // Getting input configurable value
+//     let configurableValue = undefined;
+//     configurableValue = input.configurable;
+
+//     // Checking if configurable value was returned properly
+//     // expect(configurableValue).to.not.equal(undefined, GetErrorMessage(ETestErrorMsg.Configurable, inputType));
+
+//     // Getting input property
+//     let properties = undefined;
+//     properties = input.properties;
+
+//     // Checking if properties were returned properly
+//     // expect(properties).to.not.equal(undefined, GetErrorMessage(ETestErrorMsg.Properties, inputType));
+
+//     // Getting input settings
+//     let settings = undefined;
+//     settings = input.settings;
+
+//     // Checking if settings were returned properly
+//     // expect(settings).to.not.equal(undefined, GetErrorMessage(ETestErrorMsg.Settings, inputType));
+
+//     // Getting output flags
+//     let outputFlags = undefined;
+//     outputFlags = input.outputFlags;
+
+//     // Checking if output flags were returned properly
+//     // expect(outputFlags).to.not.equal(undefined, GetErrorMessage(ETestErrorMsg.OutputFlags, inputType));
+
+//     input.release();
+// });
+  
+  
+  
+  
+  // const sceneItem1 = scene.add(source1);
+  // osn.Global.setOutputSource(0, source);
+  // osn.Global.setOutputSource(1, scene);
+  
   obsInitialized = true;
 
   const perfStatTimer = setInterval(() => {
@@ -438,6 +523,27 @@ function busySleep(sleepDuration) {
   while(new Date().getTime() < now + sleepDuration) { /* do nothing */ };
 }
 
+
+function addVideoSource(filePath){
+  // const source= osn.InputFactory.create('ffmpeg_source', 'video', {file: path});
+  const source = osn.InputFactory.create(
+    'ffmpeg_source',
+    "video_test",
+    {
+      is_local_file: true,
+      local_file: filePath,
+      looping: true,
+    }
+  );
+  source.settings["buffering_mb"] = 3;
+  source.settings["clear_on_media_end"] = false;
+  source.settings["looping"] = true;
+  source.settings["speed_percent"] = 80;
+  source.settings["caching"] = true;//
+  scene.add(source)
+
+}
+
 module.exports.initialize = initialize;
 module.exports.start = start;
 module.exports.isVirtualCamPluginInstalled = isVirtualCamPluginInstalled;
@@ -449,3 +555,6 @@ module.exports.stop = stop;
 module.exports.shutdown = shutdown;
 module.exports.setupPreview = setupPreview;
 module.exports.resizePreview = resizePreview;
+
+
+module.exports.addVideoSource = addVideoSource;

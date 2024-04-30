@@ -138,6 +138,12 @@ async function resizePreview() {
   previewContainer.style = `height: ${result.height}px`;
 }
 
+async function selectVideo(){
+  const result = await ipcRenderer.invoke('dialog:openFile');
+  console.debug("stopRecording result:", result);
+  return result;
+}
+
 const currentWindow = remote.getCurrentWindow();
 currentWindow.on('resize', resizePreview);
 document.addEventListener("scroll",  resizePreview);
@@ -145,7 +151,9 @@ var ro = new ResizeObserver(resizePreview);
 ro.observe(document.querySelector("#preview"));
 
 try {
+  // 初始化obs
   initOBS();
+  // 注册预览视图
   setupPreview();
   updateRecordingUI();
   updateVirtualCamUI();

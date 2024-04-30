@@ -1,7 +1,18 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain,dialog } = require('electron')
 const path = require('path');
 
 const obsRecorder = require('./obsRecorder');
+
+async function handleFileOpen(){
+  const {canceled,filePaths} = await dialog.showOpenDialog()
+  if(!canceled){
+
+    console.log(filePaths)
+    
+    obsRecorder.addVideoSource(filePaths[0])
+    return filePaths[0]
+  }
+}
 
 ipcMain.handle('recording-start', (event) => {
   obsRecorder.start();
@@ -28,6 +39,9 @@ ipcMain.handle('installVirtualCamPlugin', (event) => {
 ipcMain.handle('uninstallVirtualCamPlugin', (event) => {
   return obsRecorder.uninstallVirtualCamPlugin();
 });
+
+// 监听选择文件
+ipcMain.handle('dialog:openFile', handleFileOpen);
 
 app.on('will-quit', obsRecorder.shutdown);
 
@@ -87,3 +101,8 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+// 添加场景事件
+ipcMain.handle('addScene', (event, scene) => {
+  return obsRecorder.addScene(scene);
+});
